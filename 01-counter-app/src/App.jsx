@@ -3,9 +3,9 @@ import Counter from "./features/counter/Counter";
 
 const App = () => {
   return (
-    <div className='App'>
+    <main className='App'>
       <Counter />
-    </div>
+    </main>
   );
 };
 
