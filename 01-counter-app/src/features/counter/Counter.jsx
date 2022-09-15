@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+// Action creators from Slice
 import { increment, decrement, reset, incrementByAmount } from "./counterSlice";
 
 const Counter = () => {
+  // Read the data from store
   const count = useSelector((state) => state.counter.count);
+  // Dispatch actions to store
   const dispatch = useDispatch();
   const [incrementAmount, setIncrementAmount] = useState(0);
 
