@@ -14,7 +14,8 @@ const AddPostForm = () => {
 
   const onSavePostClicked = () => {
     if (title && content) {
-      dispatch(postAdded({ id: nanoid(), title, content }));
+      // We send the raw states to slice and handle there
+      dispatch(postAdded(title, content));
 
       setTitle("");
       setContent("");
