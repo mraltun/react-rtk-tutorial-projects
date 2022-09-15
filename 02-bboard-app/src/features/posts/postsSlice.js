@@ -23,9 +23,8 @@ const postsSlice = createSlice({
   },
 });
 
-// useSelector logic
+// useSelector logic here to read data from the store
 export const selectAllPosts = (state) => state.posts;
-// Action creator functions automatically created by createSlice above
 export const { postAdded } = postsSlice.actions;
 
 export default postsSlice.reducer;

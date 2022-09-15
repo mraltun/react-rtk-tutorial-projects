@@ -27,7 +27,7 @@ export const counterSlice = createSlice({
   },
 });
 
-// Action creators (The ones we dispatch "type, payload" object) are generated for each case reducer function
+// Action creators (The ones we dispatch "type, payload" object) are created for each case reducer function by createSlice above
 export const { increment, decrement, reset, incrementByAmount } =
   counterSlice.actions;
 
