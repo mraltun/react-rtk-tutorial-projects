@@ -23,13 +23,14 @@ const postsSlice = createSlice({
       },
       // Prepare Callback to customize payload of the action
       // https://redux-toolkit.js.org/api/createAction#using-prepare-callbacks-to-customize-action-contents
-      prepare(title, content) {
+      prepare(title, content, userId) {
         return {
           payload: {
             // Generate a random ID string
             id: nanoid(),
             title,
             content,
+            userId,
           },
         };
       },
