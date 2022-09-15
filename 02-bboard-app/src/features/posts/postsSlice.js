@@ -21,10 +21,12 @@ const postsSlice = createSlice({
       reducer(state, action) {
         state.push(action.payload);
       },
-      // Prepare callback to customize payload of the action
+      // Prepare Callback to customize payload of the action
+      // https://redux-toolkit.js.org/api/createAction#using-prepare-callbacks-to-customize-action-contents
       prepare(title, content) {
         return {
           payload: {
+            // Generate a random ID string
             id: nanoid(),
             title,
             content,
