@@ -29,6 +29,7 @@ const PostsList = () => {
       .slice()
       // Compare date string and return negative or positive number then sort them.
       .sort((a, b) => b.date.localeCompare(a.date));
+
     content = orderedPosts.map((post) => (
       <PostsExcerpt key={post.id} post={post} />
     ));
