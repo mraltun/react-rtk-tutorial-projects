@@ -93,6 +93,8 @@ const postsSlice = createSlice({
 
 // useSelector logic here to read data from the store. Bonus: We changed shape of the state and we only had to update this file.
 export const selectAllPosts = (state) => state.posts.posts;
+export const getPostsStatus = (state) => state.posts.status;
+export const getPostsError = (state) => state.posts.error;
 export const { postAdded, reactionAdded } = postsSlice.actions;
 
 export default postsSlice.reducer;
