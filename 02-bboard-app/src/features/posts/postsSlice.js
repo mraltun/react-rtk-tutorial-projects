@@ -61,7 +61,9 @@ const postsSlice = createSlice({
       },
     },
     reactionAdded(state, action) {
+      // Get post id and the reaction that user select
       const { postId, reaction } = action.payload;
+      // Select the correct post
       const existingPost = state.find((post) => post.id === postId);
       if (existingPost) {
         existingPost.reactions[reaction]++;
