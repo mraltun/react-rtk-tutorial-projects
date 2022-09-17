@@ -75,6 +75,7 @@ const postsSlice = createSlice({
   // This slice can respond to other action types besides the types it has generated.
   extraReducers(builder) {
     builder
+      // Handle a single exact action type.
       .addCase(fetchPosts.pending, (state, action) => {
         state.status = "pending";
       })
@@ -119,6 +120,7 @@ const postsSlice = createSlice({
 export const selectAllPosts = (state) => state.posts.posts;
 export const getPostsStatus = (state) => state.posts.status;
 export const getPostsError = (state) => state.posts.error;
+
 export const { postAdded, reactionAdded } = postsSlice.actions;
 
 export default postsSlice.reducer;

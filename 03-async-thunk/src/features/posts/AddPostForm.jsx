@@ -23,6 +23,7 @@ const AddPostForm = () => {
 
   const onSavePostClicked = () => {
     if (canSave) {
+      // The returned promise has unwrap function, it returns a new promise that has action payload or error if it's rejected. That's why we use try&catch here
       try {
         setAddRequestStatus("pending");
         dispatch(addNewPost({ title, body: content, userId })).unwrap();

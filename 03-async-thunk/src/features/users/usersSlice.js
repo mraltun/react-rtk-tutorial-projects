@@ -20,6 +20,7 @@ const usersSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder.addCase(fetchUsers.fulfilled, (state, action) => {
+      // Completely override the state
       return action.payload;
     });
   },
