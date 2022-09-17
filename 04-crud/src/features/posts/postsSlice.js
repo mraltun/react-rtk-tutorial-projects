@@ -45,6 +45,22 @@ export const updatePost = createAsyncThunk(
   }
 );
 
+export const deletePost = createAsyncThunk(
+  "posts/deletePost",
+  async (initialPost) => {
+    const { id } = initialPost;
+    try {
+      const response = await axios.delete(`${POSTS_URL}/${id}`, initialPost);
+      // This API doesn't return id, just returns an empty object. So we return initial id
+      if (response?.status === 200) return initialPost;
+
+      return `${response?.status}: ${response?.statusText}`;
+    } catch (error) {
+      return error.message;
+    }
+  }
+);
+
 const postsSlice = createSlice({
   name: "posts",
   initialState,
@@ -134,6 +150,14 @@ const postsSlice = createSlice({
         action.payload.date = new Date().toISOString();
         const posts = state.posts.filter((post) => post.id !== id);
         state.posts = [...posts, action.payload];
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        if (!action.payload?.id) {
+          return;
+        }
+        const { id } = action.payload;
+        const posts = state.posts.filter((post) => post.id !== id);
+        state.posts = [...posts];
       });
   },
 });
