@@ -8,6 +8,7 @@ const initialState = {
   posts: [],
   status: "idle", //| "pending" | "succeeded" | "failed",
   error: null,
+  count: 0,
 };
 
 // First parameter is action type string (which will generate pending, fulfilled and rejected action types), second parameter is "payloadCreator" callback
@@ -65,32 +66,6 @@ const postsSlice = createSlice({
   name: "posts",
   initialState,
   reducers: {
-    postAdded: {
-      reducer(state, action) {
-        state.posts.push(action.payload);
-      },
-      // Prepare Callback to customize payload of the action
-      // https://redux-toolkit.js.org/api/createAction#using-prepare-callbacks-to-customize-action-contents
-      prepare(title, content, userId) {
-        return {
-          payload: {
-            // Generate a random ID string
-            id: nanoid(),
-            title,
-            content,
-            date: new Date().toISOString(),
-            userId,
-            reactions: {
-              thumbsUp: 0,
-              wow: 0,
-              heart: 0,
-              rocket: 0,
-              coffee: 0,
-            },
-          },
-        };
-      },
-    },
     reactionAdded(state, action) {
       // Get post id and the reaction that user select
       const { postId, reaction } = action.payload;
@@ -99,6 +74,9 @@ const postsSlice = createSlice({
       if (existingPost) {
         existingPost.reactions[reaction]++;
       }
+    },
+    increaseCount(state, action) {
+      state.count = state.count + 1;
     },
   },
   // This slice can respond to other action types besides the types it has generated.
@@ -166,9 +144,11 @@ const postsSlice = createSlice({
 export const selectAllPosts = (state) => state.posts.posts;
 export const getPostsStatus = (state) => state.posts.status;
 export const getPostsError = (state) => state.posts.error;
+export const getCount = (state) => state.posts.count;
+
 export const selectPostById = (state, postId) =>
   state.posts.posts.find((post) => post.id === postId);
 
-export const { postAdded, reactionAdded } = postsSlice.actions;
+export const { increaseCount, reactionAdded } = postsSlice.actions;
 
 export default postsSlice.reducer;
