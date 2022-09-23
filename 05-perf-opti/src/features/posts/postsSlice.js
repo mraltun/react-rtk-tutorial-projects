@@ -3,18 +3,22 @@ import {
   createAsyncThunk,
   // Reselect - A library for creating memoized "selector" functions
   createSelector,
+  createEntityAdapter,
 } from "@reduxjs/toolkit";
 import { sub } from "date-fns";
 import axios from "axios";
 
 const POSTS_URL = "https://jsonplaceholder.typicode.com/posts";
 
-const initialState = {
-  posts: [],
+const PostsAdapter = createEntityAdapter({
+  sortComparer: (a, b) => b.date.localeCompare(a.date),
+});
+
+const initialState = PostsAdapter.getInitialState({
   status: "idle", //| "pending" | "succeeded" | "failed",
   error: null,
   count: 0,
-};
+});
 
 // First parameter is action type string (which will generate pending, fulfilled and rejected action types), second parameter is "payloadCreator" callback
 export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
@@ -74,8 +78,8 @@ const postsSlice = createSlice({
     reactionAdded(state, action) {
       // Get post id and the reaction that user select
       const { postId, reaction } = action.payload;
-      // Select the correct post
-      const existingPost = state.posts.find((post) => post.id === postId);
+      // Select the correct post (sortcomparer)
+      const existingPost = state.entities[postId];
       if (existingPost) {
         existingPost.reactions[reaction]++;
       }
@@ -107,7 +111,7 @@ const postsSlice = createSlice({
           return post;
         });
         // Add those modified posts to state
-        state.posts = state.posts.concat(loadedPosts);
+        PostsAdapter.upsertMany(state, loadedPosts);
       })
       .addCase(fetchPosts.rejected, (state, action) => {
         state.status = "failed";
@@ -123,36 +127,36 @@ const postsSlice = createSlice({
           rocket: 0,
           coffee: 0,
         };
-        state.posts.push(action.payload);
+        PostsAdapter.addOne(state, action.payload);
       })
       .addCase(updatePost.fulfilled, (state, action) => {
         if (!action.payload?.id) {
           return;
         }
-        const { id } = action.payload;
         action.payload.date = new Date().toISOString();
-        const posts = state.posts.filter((post) => post.id !== id);
-        state.posts = [...posts, action.payload];
+        PostsAdapter.upsertOne(state, action.payload);
       })
       .addCase(deletePost.fulfilled, (state, action) => {
         if (!action.payload?.id) {
           return;
         }
         const { id } = action.payload;
-        const posts = state.posts.filter((post) => post.id !== id);
-        state.posts = [...posts];
+        PostsAdapter.removeOne(state, id);
       });
   },
 });
 
+// Rename selectors
+export const {
+  selectAll: selectAllPosts,
+  selectById: selectPostById,
+  selectIds: selectPostIds,
+  // Pass in a selector that returns the posts slice of state
+} = PostsAdapter.getSelectors((state) => state.post);
 // useSelector logic here to read data from the store. Bonus: We changed shape of the state and we only had to update this file.
-export const selectAllPosts = (state) => state.posts.posts;
 export const getPostsStatus = (state) => state.posts.status;
 export const getPostsError = (state) => state.posts.error;
 export const getCount = (state) => state.posts.count;
-
-export const selectPostById = (state, postId) =>
-  state.posts.posts.find((post) => post.id === postId);
 
 export const selectPostsByUser = createSelector(
   // Input functions (returning results are dependencies)
