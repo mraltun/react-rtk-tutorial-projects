@@ -27,5 +27,8 @@ const usersSlice = createSlice({
 });
 
 export const selectAllUsers = (state) => state.users;
+// Take the state and user id, then return the user with same id from the state
+export const selectUserById = (state, userId) =>
+  state.users.find((user) => user.id === userId);
 
 export default usersSlice.reducer;
