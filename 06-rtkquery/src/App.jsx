@@ -1,5 +1,5 @@
 import React from "react";
-import TodoList from "./features/TodoList";
+import TodoList from "./features/todos/TodoList";
 
 const App = () => {
   return <TodoList />;
