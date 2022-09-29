@@ -63,7 +63,7 @@ const TodoList = () => {
                 updateTodo({ ...todo, completed: !todo.completed })
               }
             />
-            <label htmlFor={todo.id}>{todo.id}</label>
+            <label htmlFor={todo.id}>{todo.title}</label>
           </div>
           <button className='trash' onClick={() => deleteTodo({ id: todo.id })}>
             <FontAwesomeIcon icon={faTrash} />

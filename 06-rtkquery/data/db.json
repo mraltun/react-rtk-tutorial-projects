@@ -4,13 +4,13 @@
       "userId": 1,
       "id": 2,
       "title": "quis ut nam facilis et officia qui",
-      "completed": true
+      "completed": false
     },
     {
       "userId": 1,
       "id": 6,
       "title": "qui ullam ratione quibusdam voluptatem quia omnis",
-      "completed": false
+      "completed": true
     },
     {
       "userId": 1,
@@ -1167,7 +1167,7 @@
     {
       "userId": 1,
       "title": "Another new todo!",
-      "completed": false,
+      "completed": true,
       "id": 201
     }
   ]

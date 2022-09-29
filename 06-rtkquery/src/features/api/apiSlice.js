@@ -5,14 +5,22 @@ export const apiSlice = createApi({
   // Path for this slice
   reducerPath: "api",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3500" }),
+  // Array of tag type names that we will re-fetch.
+  tagTypes: ["Todos"],
   endpoints: (builder) => ({
-    getTodos: builder.query({ query: () => "/todos" }),
+    getTodos: builder.query({
+      query: () => "/todos",
+      // Which tag of the cached data should returned by the query
+      providesTags: ["Todos"],
+    }),
     addTodo: builder.mutation({
       query: (todo) => ({
         url: "/todos",
         method: "POST",
         body: todo,
       }),
+      // Which data should be re-fetched or removed from the cache. For mutation endpoints.
+      invalidatesTags: ["Todos"],
     }),
     updateTodo: builder.mutation({
       query: (todo) => ({
@@ -27,6 +35,7 @@ export const apiSlice = createApi({
         method: "DELETE",
         body: id,
       }),
+      invalidatesTags: ["Todos"],
     }),
   }),
 });
