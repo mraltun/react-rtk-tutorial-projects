@@ -2,34 +2,41 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectUserById } from "./usersSlice";
-import { selectAllPosts, selectPostsByUser } from "../posts/postsSlice";
+import { useGetPostsByUserIdQuery } from "../posts/postsSlice";
 
 const UserPage = () => {
   const { userId } = useParams();
   // Pass the state and user id after turning it to number
   const user = useSelector((state) => selectUserById(state, Number(userId)));
 
-  const postsForUser = useSelector((state) =>
-    // Use memoised selector
-    selectPostsByUser(state, Number(userId))
-  );
+  const {
+    data: postsForUser,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useGetPostsByUserIdQuery(userId);
 
-  //  This old one was re-rendering every time.
-  //   useSelector((state) => {
-  //   const allPosts = selectAllPosts(state);
-  //   return allPosts.filter((post) => post.userId === Number(userId));
-  // });
-
-  const postTitles = postsForUser.map((post) => (
-    <li key={post.id}>
-      <Link to={`/post/${post.id}`}>{post.title}</Link>
-    </li>
-  ));
+  let content;
+  if (isLoading) {
+    content = <p>Loading...</p>;
+  } else if (isSuccess) {
+    // We have normalized state, which means state has ids array and entities object that has all the individual posts for the user
+    const { ids, entities } = postsForUser;
+    content = ids.map((id) => (
+      <li key={id}>
+        {/* Entities is the lookup object */}
+        <Link to={`/post/${id}`}>{entities[id].title}</Link>
+      </li>
+    ));
+  } else if (isError) {
+    content = <p>{error}</p>;
+  }
 
   return (
     <section>
       <h2>{user?.name}</h2>
-      <ol>{postTitles}</ol>
+      <ol>{content}</ol>
     </section>
   );
 };
