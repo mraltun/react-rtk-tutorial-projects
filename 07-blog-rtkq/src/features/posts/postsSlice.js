@@ -16,7 +16,7 @@ const initialState = postsAdapter.getInitialState({});
 export const extendedApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getPosts: builder.query({
-      query: () => "/post",
+      query: () => "/posts",
       transformResponse: (responseData) => {
         let min = 1;
         const loadedPosts = responseData.map((post) => {
