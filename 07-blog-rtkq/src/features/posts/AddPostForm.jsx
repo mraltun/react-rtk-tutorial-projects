@@ -1,17 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { addNewPost } from "./postsSlice";
+import { useSelector } from "react-redux";
 import { selectAllUsers } from "../users/usersSlice";
+import { useAddNewPostMutation } from "./postsSlice";
 
 const AddPostForm = () => {
-  const dispatch = useDispatch();
+  const [addNewPost, { isLoading }] = useAddNewPostMutation();
   const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [userId, setUserId] = useState("");
-  const [addRequestStatus, setAddRequestStatus] = useState("idle");
 
   const users = useSelector(selectAllUsers);
 
@@ -20,15 +19,13 @@ const AddPostForm = () => {
   const onAuthorChanged = (e) => setUserId(e.target.value);
 
   // Get the boolean values of the states. They all need to be true to disable "disabled" on the button
-  const canSave =
-    [title, content, userId].every(Boolean) && addRequestStatus === "idle";
+  const canSave = [title, content, userId].every(Boolean) && !isLoading;
 
-  const onSavePostClicked = () => {
+  const onSavePostClicked = async () => {
     if (canSave) {
       // The returned promise has unwrap function, it returns a new promise that has action payload or error if it's rejected. That's why we use try&catch here
       try {
-        setAddRequestStatus("pending");
-        dispatch(addNewPost({ title, body: content, userId })).unwrap();
+        await addNewPost({ title, body: content, userId }).unwrap();
 
         setTitle("");
         setContent("");
@@ -36,8 +33,6 @@ const AddPostForm = () => {
         navigate("/");
       } catch (error) {
         console.log("Failed to save the post", error);
-      } finally {
-        setAddRequestStatus("idle");
       }
     }
   };
