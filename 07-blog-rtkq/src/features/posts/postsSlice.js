@@ -111,6 +111,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
         // In a real app, we'd probably need to base this on user ID somehow so that a user can't do the same reaction more than once
         body: { reactions },
       }),
+      // This will run when the mutation started
       async onQueryStarted(
         { postId, reactions },
         { dispatch, queryFulfilled }
