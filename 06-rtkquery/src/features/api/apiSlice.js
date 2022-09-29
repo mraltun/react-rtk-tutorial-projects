@@ -10,6 +10,8 @@ export const apiSlice = createApi({
   endpoints: (builder) => ({
     getTodos: builder.query({
       query: () => "/todos",
+      // Change the data returned by a query or mutation.
+      transformResponse: (res) => res.sort((a, b) => b.id - a.id),
       // Which tag of the cached data should returned by the query
       providesTags: ["Todos"],
     }),
