@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-
+// Look at react dev tools state
 const USERS_URL = "https://jsonplaceholder.typicode.com/users";
 
 const initialState = [];
